@@ -1,13 +1,32 @@
+"""
+Author: Leon Burghardt
+Created on: 2023-02-11
+
+This module is used to enable ESP (Extra Sensory Perception).
+
+"""
+
 import pymem
 import pymem.process
+from utils.offsets import get_offset
 
-
-dwEntityList = 81788660
-dwGlowObjectManager = 87402952
-m_iGlowIndex = 66696
-m_iTeamNum = 244
+# Offsets
+dwEntityList = get_offset("dwEntityList")
+dwGlowObjectManager = get_offset("dwGlowObjectManager")
+m_iGlowIndex = get_offset("m_iGlowIndex")
+m_iTeamNum = get_offset("m_iTeamNum")
 
 def esp():
+    """
+    This function is the main function of the module. It uses Pymem to connect to the process of the game "csgo.exe",
+    retrieves the base address of the module "client.dll",
+    and then continuously loops through the entities in the game to find the Terrorist and Counter-Terrorist players.
+    
+    The glow color for each player is set based on their team, and the glow is enabled for each player.
+
+    """
+
+    # get process
     pm = pymem.Pymem("csgo.exe")
     
     # get module address
@@ -16,24 +35,33 @@ def esp():
             client = module.lpBaseOfDll
             break
 
+    # Loop indefinitely without sleeping to continuously update the ESP
     while True:
+
+        # Read the address of the glow manager from memory
         glow_manager = pm.read_int(client + dwGlowObjectManager)
 
-        for i in range(1, 32):  # Entities 1-32 are reserved for players.
+        # loop through player reserved entities 1-32 
+        for i in range(1, 32): 
+
+            # Read the address of the entity from memory
             entity = pm.read_int(client + dwEntityList + i * 0x10)
 
             if entity:
+                # if exist, read teamd id and glow index
                 entity_team_id = pm.read_int(entity + m_iTeamNum)
                 entity_glow = pm.read_int(entity + m_iGlowIndex)
 
-                if entity_team_id == 2:  # Terrorist
+                if entity_team_id == 2:  # t
+                    # set glow to red
                     pm.write_float(glow_manager + entity_glow * 0x38 + 0x8, float(1))   # R
                     pm.write_float(glow_manager + entity_glow * 0x38 + 0xC, float(0))   # G
                     pm.write_float(glow_manager + entity_glow * 0x38 + 0x10, float(0))  # B
                     pm.write_float(glow_manager + entity_glow * 0x38 + 0x14, float(1))  # Alpha
                     pm.write_int(glow_manager + entity_glow * 0x38 + 0x28, 1)           # Enable glow
 
-                elif entity_team_id == 3:  # Counter-terrorist
+                elif entity_team_id == 3:  # ct
+                    # set glow to blue
                     pm.write_float(glow_manager + entity_glow * 0x38 + 0x8, float(0))   # R
                     pm.write_float(glow_manager + entity_glow * 0x38 + 0xC, float(0))   # G
                     pm.write_float(glow_manager + entity_glow * 0x38 + 0x10, float(1))  # B
