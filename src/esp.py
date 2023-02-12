@@ -6,9 +6,8 @@ This module is used to enable ESP (Extra Sensory Perception).
 
 """
 
-import pymem
-import pymem.process
 from utils.offsets import get_offset
+from utils.process import get_pm, get_client
 
 # Offsets
 dwEntityList = get_offset("dwEntityList")
@@ -26,18 +25,12 @@ def esp():
 
     """
 
-    # get process
-    pm = pymem.Pymem("csgo.exe")
-    
-    # get module address
-    for module in pm.list_modules():
-        if module.name == "client.dll":
-            client = module.lpBaseOfDll
-            break
+    # get process and mem adress of client
+    pm = get_pm()
+    client = get_client()
 
     # Loop indefinitely without sleeping to continuously update the ESP
     while True:
-
         # Read the address of the glow manager from memory
         glow_manager = pm.read_int(client + dwGlowObjectManager)
 
@@ -61,10 +54,9 @@ def esp():
                     pm.write_int(glow_manager + entity_glow * 0x38 + 0x28, 1)           # Enable glow
 
                 elif entity_team_id == 3:  # ct
-                    # set glow to blue
+                    
                     pm.write_float(glow_manager + entity_glow * 0x38 + 0x8, float(0))   # R
                     pm.write_float(glow_manager + entity_glow * 0x38 + 0xC, float(0))   # G
                     pm.write_float(glow_manager + entity_glow * 0x38 + 0x10, float(1))  # B
                     pm.write_float(glow_manager + entity_glow * 0x38 + 0x14, float(1))  # Alpha
                     pm.write_int(glow_manager + entity_glow * 0x38 + 0x28, 1)           # Enable glow
-

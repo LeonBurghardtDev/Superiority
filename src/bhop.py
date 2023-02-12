@@ -6,11 +6,10 @@ This module contains the bhop function.
 
 """
 
-import pymem
-import pymem.process
 import time
-import win32api
+import keyboard
 from utils.offsets import get_offset
+from utils.process import get_pm, get_client
 
 
 # Offsets
@@ -29,24 +28,19 @@ def bhop() -> None:
 
     """
 
-    # get process
-    pm = pymem.Pymem("csgo.exe")
-
-
-    # get module address
-    for module in pm.list_modules():
-        if module.name == "client.dll":
-            client = module.lpBaseOfDll
-            break
+    # get process and mem adress of client
+    pm = get_pm()
+    client = get_client()
 
     # main loop
+    i = 0
     while True:
 
         # sleep 10 milliseconds to reduce cpu usage
         time.sleep(0.01)
 
         # check if spacebar is being pressed
-        if not win32api.GetAsyncKeyState(0x20):
+        if not keyboard.is_pressed("space"):
             continue
 
         # get mem address of local player
@@ -67,5 +61,4 @@ def bhop() -> None:
             pm.write_int(client + dwForceJump, 6)
             time.sleep(0.01)
             pm.write_int(client + m_fFlags, 4)
-
 

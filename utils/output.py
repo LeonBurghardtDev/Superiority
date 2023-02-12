@@ -31,5 +31,5 @@ def print_error(text: str) -> None:
     Args:
         text (str): The text to be printed to the console.
     """
-    print(f"\033[31m{text}\033[0m")
+  
 

@@ -44,6 +44,3 @@ def get_all_offsets() -> dict:
     """
 
     return requests.get("https://raw.githubusercontent.com/frk1/hazedumper/master/csgo.json").json()
-
-
-print(get_all_offsets())

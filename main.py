@@ -6,38 +6,29 @@ This module is the main module of the cheat.
 It calls all the processes and threads -> Cheat Elements (bhop, esp, etc.)
 
 """
-
-from src.bhop import bhop
-from src.esp import esp
+from utils.gui import create_gui
 from utils.output import print_success, print_error
 from multiprocessing import Process
+from utils.threads import start_threads
+
 
 def main():
-    print_success("tr3x cheat starting...")
+    print_success("Superiority starting...")
+    createGUI()
+    start_threads()
 
+def createGUI():
+    # start gui
+    gui_process = Process(target=create_gui)
+    gui_process.start()
+
+    # check if gui started
+    if gui_process.is_alive():
+        print_success("gui started")
+    else:
+        print_error("gui failed to start")
     
-    # start bhop
-    bhop_process = Process(target=bhop)
-    bhop_process.start()
-
-    # check if bhop started
-    if bhop_process.is_alive():
-        print_success("bhop started")
-    else:
-        print_error("bhop failed to start")
-
-
-    # start esp
-    esp_process = Process(target=esp)
-    esp_process.start()
-
-    # check if esp started
-    if esp_process.is_alive():
-        print_success("esp started")
-    else:
-        print_error("esp failed to start")
-
-# compiler entry point
+# entry point
 if __name__ == "__main__":
     main()
 
