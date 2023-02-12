@@ -162,7 +162,6 @@ def aimbot():
 
     # config data
     key = getConfiguration("aimbot+key")
-    locked = getConfiguration("aimbot+locked")
     fov = int(getConfiguration("aimbot+fov"))
 
     # get local player
@@ -221,7 +220,7 @@ def aimbot():
                         target_y = entitypos_y # set target position
                         target_z = entitypos_z # set target position
                     
-                    if keyboard.is_pressed(key) or ast.literal_eval(locked): # check if aimbot key is pressed
+                    if keyboard.is_pressed(key): # check if aimbot key is pressed
                         if target and target_hp > 0 and not target_dormnat: # check if target is valid
                             x, y = calcangle(localpos_x, localpos_y, localpos_z, target_x, target_y, target_z) # calculate angle between local player and target
                             normalize_x, normalize_y = normalizeAngles(x, y) # normalize angle

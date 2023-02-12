@@ -30,22 +30,31 @@ def ensure_config_exists():
                             'bhop+key': 'scroll down',
                             'bhop+activate+key': 'f2',
 
-                            'thirdperson+toggle': 'False',
+                            'thirdperson+toggle': 'False',      
                             'thirdperson+key': 'v',
                             'thirdperson+activate+key': 'f3',
 
                             'esp+toggle': 'False',
                             'esp+activate+key': 'f4',
 
+                            'radar+toggle': 'False',
+                            'radar+activate+key': 'f5',
+
+                            'norecoil+toggle': 'False',
+                            'norecoil+activate+key': 'f6',
+
+                            'noflash+toggle': 'False',
+                            'noflash+activate+key': 'f7',
+
                             'fov+toggle': 'False',
                             'fov': '140',
                             'fov+key': 'x',
-                            'fov+activate+key': 'f5',
+                            'fov+activate+key': 'f8',
 
                             'aimbot+toggle': 'False',
                             'aimbot+key': 'alt',
                             'aimbot+fov': '140',
-                            'aimbot+activate+key': 'f6',
+                            'aimbot+activate+key': 'f9',
 
                         }
 

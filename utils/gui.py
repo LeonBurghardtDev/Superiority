@@ -12,8 +12,7 @@ import os
 import ast
 import webbrowser
 from utils.config import getConfiguration, setConfiguration
-from utils.threads import bhop_change_status, esp_change_status, fov_change_status, triggerbot_change_status, thirdperson_change_status , aimbot_change_status
-
+from utils.threads import *
 
 class SuperiorityGUI():
     """
@@ -28,6 +27,9 @@ class SuperiorityGUI():
     esp_btn_text = f"ESP (activate hotkey: {getConfiguration('esp+activate+key').upper()})"
     aimbot_btn_text = f"Aimbot (usage: {getConfiguration('aimbot+key')}) (activate hotkey: {getConfiguration('aimbot+activate+key').upper()})"
     fov_btn_text = f"FOV (usage: {getConfiguration('fov+key').upper()}) (activate hotkey: {getConfiguration('fov+activate+key').upper()})"
+    radar_btn_text = f"Radar (activate hotkey: {getConfiguration('radar+activate+key').upper()})"
+    noflash_btn_text = f"NoFlash (activate hotkey: {getConfiguration('noflash+activate+key').upper()})"
+    norecoil_btn_text = f"NoRecoil (activate hotkey: {getConfiguration('norecoil+activate+key').upper()})"
     
 
     def __init__(self, master):
@@ -43,6 +45,9 @@ class SuperiorityGUI():
         self.fov_var = tk.BooleanVar()
         self.triggerbot_var = tk.BooleanVar()
         self.aimbot_var = tk.BooleanVar()
+        self.radar_var = tk.BooleanVar()
+        self.noflash_var = tk.BooleanVar()
+        self.norecoil_var = tk.BooleanVar()
 
         # set the checkbuttons to the current status of the cheats
         self.triggerbot_var.set(getConfiguration("triggerbot+toggle"))
@@ -51,6 +56,9 @@ class SuperiorityGUI():
         self.esp_var.set(getConfiguration("esp+toggle"))
         self.fov_var.set(getConfiguration("fov+toggle"))
         self.aimbot_var.set(getConfiguration("aimbot+toggle"))
+        self.radar_var.set(getConfiguration("radar+toggle"))
+        self.noflash_var.set(getConfiguration("noflash+toggle"))
+        self.norecoil_var.set(getConfiguration("norecoil+toggle"))
 
         # create the gui elements
 
@@ -76,6 +84,18 @@ class SuperiorityGUI():
         # checkbuttons for thirdperson
         self.thirdperson_cb = tk.Checkbutton(master,name='thirdperson', text=self.thirdperson_btn_text, variable=self.thirdperson_var, command=self.thirdperson_toggle)
         self.thirdperson_cb.pack()
+
+        # checkbox for radar
+        self.radar_cb = tk.Checkbutton(master,name='radar', text=self.radar_btn_text, variable=self.radar_var, command=self.radar_toggle)
+        self.radar_cb.pack()
+
+        # checkbuttons for noflash
+        self.noflash_cb = tk.Checkbutton(master,name='noflash', text=self.noflash_btn_text, variable=self.noflash_var, command=self.noflash_toggle)
+        self.noflash_cb.pack()
+
+        # checkbuttons for norecoil
+        self.norecoil_cb = tk.Checkbutton(master,name='norecoil', text=self.norecoil_btn_text, variable=self.norecoil_var, command=self.norecoil_toggle)
+        self.norecoil_cb.pack()
 
         # checkbuttons for esp
         self.esp_cb = tk.Checkbutton(master,name='esp',text=self.esp_btn_text, variable=self.esp_var, command=self.esp_toggle)
@@ -198,14 +218,26 @@ class SuperiorityGUI():
         setConfiguration("bhop+toggle", str(self.bhop_var.get()))
         bhop_change_status()
 
+    def noflash_toggle(self):
+        setConfiguration("noflash+toggle", str(self.noflash_var.get()))
+        noflash_change_status()
+
     def thirdperson_toggle(self):
         setConfiguration("thirdperson+toggle", str(self.thirdperson_var.get()))
         thirdperson_change_status()
 
+    def norecoil_toggle(self):
+        setConfiguration("norecoil+toggle", str(self.norecoil_var.get()))
+        norecoil_change_status()
     # set the configuration to the current status of the checkbutton
     def esp_toggle(self):
         setConfiguration("esp+toggle", str(self.esp_var.get()))
         esp_change_status()
+
+    # set the configuration to the current status of the checkbutton
+    def radar_toggle(self):
+        setConfiguration("radar+toggle", str(self.radar_var.get()))
+        radar_change_status()
 
     # set the configuration to the current status of the checkbutton
     def fov_toggle(self):

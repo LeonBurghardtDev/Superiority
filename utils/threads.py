@@ -6,17 +6,22 @@ This module contains the threads of the cheat and manages them whether they are 
 
 """
 
+from multiprocessing import Process
+
+# imports of trhe cheats elements and utils
 from utils.config import getConfiguration
 from utils.output import print_success, print_error, print_warning
-from multiprocessing import Process
 from src.bhop import bhop
+from src.radar import radar
 from src.aimbot import aimbot
 from src.esp import esp
+from src.norecoil import norecoil
+from src.noflash import noflash
 from src.thirdperson import thirdperson
 from src.triggerbot import triggerbot
 from src.fov import fov
 
-# TODO: this works, but threads would be more efficient and performant
+# TODO: this works, but threads would be more efficient and performant BUT threads could not be killed therefore processes are being used
 
 
 # class to store the processes
@@ -27,6 +32,9 @@ class Processes:
     p_triggerbot:Process = None
     p_thirdperson:Process = None
     p_aimbot:Process = None
+    p_radar:Process = None
+    p_noflash:Process = None
+    p_norecoil:Process = None
 
 def bhop_change_status():
     """
@@ -186,6 +194,83 @@ def aimbot_change_status():
     else:
         print_error("aimbot status could not be updated: there was an error managing the aimbot process")
 
+def radar_change_status():
+    """
+    This function manages the radar process
+    """
+
+    radar_process = Processes.p_radar
+    if radar_process is None:
+        radar_process = Process(target=radar)
+        Processes.p_radar = radar_process
+
+     # create a new process for radar
+    if getConfiguration('radar+toggle') == 'True':
+        radar_process.start()
+        # check if radar started
+        if radar_process.is_alive():
+            print_success("radar started")
+        else:
+            print_error("radar failed to start")
+    elif getConfiguration('radar+toggle') == 'False':
+        if radar_process.is_alive():
+            radar_process.kill()
+            Processes.p_radar = None
+        print_warning("radar is disabled")
+    else:
+        print_error("radar status could not be updated: there was an error managing the radar process")
+
+def noflash_change_status():
+    """
+    This function manages the noflash process
+    """
+
+    noflash_process = Processes.p_noflash
+    if noflash_process is None:
+        noflash_process = Process(target=noflash)
+        Processes.p_noflash = noflash_process
+
+     # create a new process for noflash
+    if getConfiguration('noflash+toggle') == 'True':
+        noflash_process.start()
+        # check if noflash started
+        if noflash_process.is_alive():
+            print_success("noflash started")
+        else:
+            print_error("noflash failed to start")
+    elif getConfiguration('noflash+toggle') == 'False':
+        if noflash_process.is_alive():
+            noflash_process.kill()
+            Processes.p_noflash = None
+        print_warning("noflash is disabled")
+    else:
+        print_error("noflash status could not be updated: there was an error managing the noflash process")
+
+def norecoil_change_status():
+    """
+    This function manages the norecoil process
+    """
+
+    norecoil_process = Processes.p_norecoil
+    if norecoil_process is None:
+        norecoil_process = Process(target=norecoil)
+        Processes.p_norecoil = norecoil_process
+
+     # create a new process for norecoil
+    if getConfiguration('norecoil+toggle') == 'True':
+        norecoil_process.start()
+        # check if norecoil started
+        if norecoil_process.is_alive():
+            print_success("norecoil started")
+        else:
+            print_error("norecoil failed to start")
+    elif getConfiguration('norecoil+toggle') == 'False':
+        if norecoil_process.is_alive():
+            norecoil_process.kill()
+            Processes.p_norecoil = None
+        print_warning("norecoil is disabled")
+    else:
+        print_error("norecoil status could not be updated: there was an error managing the norecoil process")
 
 def start_threads():
     """
@@ -197,5 +282,8 @@ def start_threads():
     esp_change_status()
     aimbot_change_status()
     fov_change_status()
+    radar_change_status()
+    noflash_change_status()
+    norecoil_change_status
 
 
