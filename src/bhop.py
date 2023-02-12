@@ -10,6 +10,7 @@ import time
 import keyboard
 from utils.offsets import get_offset
 from utils.process import get_pm, get_client
+from utils.config import getConfiguration, setConfiguration
 
 
 # Offsets
@@ -39,8 +40,18 @@ def bhop() -> None:
         # sleep 10 milliseconds to reduce cpu usage
         time.sleep(0.01)
 
+        # config data
+        key = getConfiguration("bhop+key")
+
+        # mouse not supported yet so we use spacebar if user enters mouse or invalid key
+        try:
+            keyboard.is_pressed(key)
+        except:
+            key = "space"
+            setConfiguration("bhop+key", key)
+
         # check if spacebar is being pressed
-        if not keyboard.is_pressed("space"):
+        if not keyboard.is_pressed(key):
             continue
 
         # get mem address of local player
@@ -48,10 +59,6 @@ def bhop() -> None:
 
         # check if the address was found
         if not local_player:
-            continue
-
-        # check if player is alive
-        if not pm.read_int(local_player + m_fFlags):
             continue
 
         # check if player is on ground

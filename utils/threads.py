@@ -10,6 +10,7 @@ from utils.config import getConfiguration
 from utils.output import print_success, print_error, print_warning
 from multiprocessing import Process
 from src.bhop import bhop
+from src.aimbot import aimbot
 from src.esp import esp
 from src.thirdperson import thirdperson
 from src.triggerbot import triggerbot
@@ -25,6 +26,7 @@ class Processes:
     p_fov:Process = None
     p_triggerbot:Process = None
     p_thirdperson:Process = None
+    p_aimbot:Process = None
 
 def bhop_change_status():
     """
@@ -158,6 +160,33 @@ def thirdperson_change_status():
     else:
         print_error("thirdperson status could not be updated: there was an error managing the thirdperson process")
 
+def aimbot_change_status():
+    """
+    This function manages the aimbot process
+    """
+
+    aimbot_process = Processes.p_aimbot
+    if aimbot_process is None:
+        aimbot_process = Process(target=aimbot)
+        Processes.p_aimbot = aimbot_process
+
+     # create a new process for aimbot
+    if getConfiguration('aimbot+toggle') == 'True':
+        aimbot_process.start()
+        # check if aimbot started
+        if aimbot_process.is_alive():
+            print_success("aimbot started")
+        else:
+            print_error("aimbot failed to start")
+    elif getConfiguration('aimbot+toggle') == 'False':
+        if aimbot_process.is_alive():
+            aimbot_process.kill()
+            Processes.p_aimbot = None
+        print_warning("aimbot is disabled")
+    else:
+        print_error("aimbot status could not be updated: there was an error managing the aimbot process")
+
+
 def start_threads():
     """
     Starts all the threads of the cheat.
@@ -166,6 +195,7 @@ def start_threads():
     triggerbot_change_status()
     bhop_change_status()
     esp_change_status()
+    aimbot_change_status()
     fov_change_status()
 
 

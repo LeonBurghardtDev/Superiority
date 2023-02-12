@@ -14,6 +14,7 @@ class Process:
     """
     static_pm: pymem.Pymem = None
     static_client: __module__ = None
+    static_engine: __module__ = None
 
 
 def get_pm() -> pymem.Pymem:
@@ -34,9 +35,6 @@ def get_client() -> int:
     """
     This function returns the client.dll module address.
 
-    Args:
-        pm (pymem.Pymem): A pymem.Pymem object.
-
     Returns:
         int: The client.dll module address.
 
@@ -49,3 +47,19 @@ def get_client() -> int:
             if module.name == "client.dll":
                 Process.static_client = module.lpBaseOfDll
     return Process.static_client
+
+def get_engine() -> int:
+    """
+    This function returns the engine.dll module address.
+
+    Returns:
+        int: The engine.dll module address.
+
+    """
+    if Process.static_pm is None:
+        get_pm()
+    if Process.static_engine is None:
+        for module in Process.static_pm.list_modules():
+            if module.name == "engine.dll":
+                Process.static_engine = module.lpBaseOfDll
+    return Process.static_engine

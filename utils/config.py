@@ -27,6 +27,7 @@ def ensure_config_exists():
                             'triggerbot+activate+key': 'f1',
 
                             'bhop+toggle': 'False',
+                            'bhop+key': 'scroll down',
                             'bhop+activate+key': 'f2',
 
                             'thirdperson+toggle': 'False',
@@ -39,7 +40,13 @@ def ensure_config_exists():
                             'fov+toggle': 'False',
                             'fov': '140',
                             'fov+key': 'x',
-                            'fov+activate+key': 'f5'
+                            'fov+activate+key': 'f5',
+
+                            'aimbot+toggle': 'False',
+                            'aimbot+key': 'alt',
+                            'aimbot+fov': '140',
+                            'aimbot+activate+key': 'f6',
+
                         }
 
     # Check if the Superiority directory exists

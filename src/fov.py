@@ -19,9 +19,7 @@ m_iDefaultFOV = get_offset("m_iDefaultFOV")
 dwLocalPlayer = get_offset("dwLocalPlayer")
 m_fFlags = get_offset("m_fFlags")
 
-# Config data
-targetFov = getConfiguration("fov")
-key = getConfiguration("fov+key")
+
 
 
 def fov():
@@ -33,6 +31,16 @@ def fov():
     
     # main loop
     while True:
+
+        # Config data
+        try:
+            targetFov = getConfiguration("fov")
+            key = getConfiguration("fov+key")
+        except:
+            targetFov = 106
+            key = "x"
+        
+        
         # get mem address of local player
         local_player: int = pm.read_int(client + dwLocalPlayer)
 

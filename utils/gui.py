@@ -12,7 +12,7 @@ import os
 import ast
 import webbrowser
 from utils.config import getConfiguration, setConfiguration
-from utils.threads import bhop_change_status, esp_change_status, fov_change_status, triggerbot_change_status, thirdperson_change_status 
+from utils.threads import bhop_change_status, esp_change_status, fov_change_status, triggerbot_change_status, thirdperson_change_status , aimbot_change_status
 
 
 class SuperiorityGUI():
@@ -22,11 +22,13 @@ class SuperiorityGUI():
     entry widgets for inputting the triggerbot delay,
     and a link to the GitHub repository.
     """
-    triggerbot_btn_text = f"Triggerbot ({getConfiguration('triggerbot+activate+key').upper()})"
-    bhop_btn_text = f"Bunnyhop ({getConfiguration('bhop+activate+key').upper()})"
-    thirdperson_btn_text = f"Thirdperson ({getConfiguration('thirdperson+activate+key').upper()})"
-    esp_btn_text = f"ESP ({getConfiguration('esp+activate+key').upper()})"
-    fov_btn_text = f"FOV ({getConfiguration('fov+activate+key').upper()})"
+    triggerbot_btn_text = f"Triggerbot (ms) (activate hotkey: {getConfiguration('triggerbot+activate+key').upper()})"
+    bhop_btn_text = f"Bunnyhop (activate hotkey: {getConfiguration('bhop+activate+key').upper()})"
+    thirdperson_btn_text = f"Thirdperson (activate hotkey: {getConfiguration('thirdperson+activate+key').upper()})"
+    esp_btn_text = f"ESP (activate hotkey: {getConfiguration('esp+activate+key').upper()})"
+    aimbot_btn_text = f"Aimbot (usage: {getConfiguration('aimbot+key')}) (activate hotkey: {getConfiguration('aimbot+activate+key').upper()})"
+    fov_btn_text = f"FOV (usage: {getConfiguration('fov+key').upper()}) (activate hotkey: {getConfiguration('fov+activate+key').upper()})"
+    
 
     def __init__(self, master):
         # create the gui
@@ -40,6 +42,7 @@ class SuperiorityGUI():
         self.esp_var = tk.BooleanVar()
         self.fov_var = tk.BooleanVar()
         self.triggerbot_var = tk.BooleanVar()
+        self.aimbot_var = tk.BooleanVar()
 
         # set the checkbuttons to the current status of the cheats
         self.triggerbot_var.set(getConfiguration("triggerbot+toggle"))
@@ -47,6 +50,7 @@ class SuperiorityGUI():
         self.thirdperson_var.set(getConfiguration("thirdperson+toggle"))
         self.esp_var.set(getConfiguration("esp+toggle"))
         self.fov_var.set(getConfiguration("fov+toggle"))
+        self.aimbot_var.set(getConfiguration("aimbot+toggle"))
 
         # create the gui elements
 
@@ -59,11 +63,11 @@ class SuperiorityGUI():
         self.triggerbot_cb.pack()
 
         
-        # input widget for triggerbot delay
-        self.delay_input = tk.Entry(master)
-        self.delay_input.bind("<KeyRelease>", self.on_edit)
-        self.delay_input.insert(0, str(float(getConfiguration("triggerbot+delay"))*1000)+" ms")
-        self.delay_input.pack()
+        # spinbox widget for triggerbot delay
+        self.delay_spinbox = tk.Spinbox(master, from_=50, to=2000, increment=10, command=self.on_edit_triggerbot_delay)
+        self.delay_spinbox.delete(0, "end")
+        self.delay_spinbox.insert(0, str(float(getConfiguration("triggerbot+delay"))*1000))
+        self.delay_spinbox.pack()
 
         # checkbuttons for bhopping
         self.bhop_cb = tk.Checkbutton(master,name='bhop', text=self.bhop_btn_text, variable=self.bhop_var, command=self.bhop_toggle)
@@ -77,9 +81,19 @@ class SuperiorityGUI():
         self.esp_cb = tk.Checkbutton(master,name='esp',text=self.esp_btn_text, variable=self.esp_var, command=self.esp_toggle)
         self.esp_cb.pack()
 
+        # checkbuttons for aimbot
+        self.aimbot_cb = tk.Checkbutton(master,name='aimbot', text=self.aimbot_btn_text, variable=self.aimbot_var, command=self.aimbot_toggle)
+        self.aimbot_cb.pack()
+
         # checkbuttons for fov
         self.fov_cb = tk.Checkbutton(master,name='fov', text=self.fov_btn_text, variable=self.fov_var, command=self.fov_toggle)
         self.fov_cb.pack()
+
+        # input widget for fov
+        self.fov_spinbox = tk.Spinbox(master, from_=0, to=180, increment=1, command=self.on_edit_fov)
+        self.fov_spinbox.delete(0, "end")
+        self.fov_spinbox.insert(0, str(getConfiguration("fov")))
+        self.fov_spinbox.pack()
 
         # button which open a file in a specified directory
         self.open_config_btn = tk.Button(master, text="Open config", command=self.open_config)
@@ -126,23 +140,44 @@ class SuperiorityGUI():
         self.master.after(500, self.current_checkbox_value) # update the checkbox value every 500ms
                         
     # function for the input widget
-    def on_edit(self):
+    def on_edit_triggerbot_delay(self):
         """
         This function is called when the user edits the input widget for the triggerbot delay.
         """
 
-        # Get the current value of the Entry widget
-        value = self.delay_input.get()
-        if not "ms" in value:
-            value = value+" ms"
-        value = value.replace(" ms", "")
+        # function for the delay input widget
+        value = self.delay_spinbox.get()
         try:
-            float(value)
             # Set the value of the input widget to the new value
-            setConfiguration("triggerbot+delay", str(float(value)/1000))
+            float(value)
+            if float(value) > 50 and float(value) < 2000:
+                setConfiguration("triggerbot+delay", str(float(value)/1000))
+            else:
+                raise ValueError
+            
         except ValueError:
-            self.delay_input.delete(0, tk.END)
-            self.delay_input.insert(0, str(float(getConfiguration("triggerbot+delay"))*1000)+" ms")
+            self.delay_spinbox.delete(0, tk.END)
+            self.delay_spinbox.insert(0, str(float(getConfiguration("triggerbot+delay"))*1000)+" ms")
+
+
+    # function for the fiv input widget
+    def on_edit_fov(self):
+        """
+        This function is called when the user edits the spinbox for the fov.
+        """
+        print("edit")
+        # Get the current value of the Entry widget
+        value = self.fov_spinbox.get()
+        try:
+            int(value)
+            if(int(value) > 89 and int(value) < 181):
+                setConfiguration("fov", str(value))
+            else:
+                raise ValueError
+        except ValueError:
+                self.fov_spinbox.delete(0, tk.END)
+                self.fov_spinbox.insert(0, str(int(getConfiguration("fov"))))
+        
 
     def open_config(self):
         """
@@ -177,6 +212,13 @@ class SuperiorityGUI():
         setConfiguration("fov+toggle", str(self.fov_var.get()))
         fov_change_status()
 
+    # set the configuration to the current status of the checkbutton
+    def aimbot_toggle(self):
+        setConfiguration("aimbot+toggle", str(self.aimbot_var.get()))
+        aimbot_change_status()
+
+    
+
 
 # function for creating the gui
 def create_gui():
@@ -185,7 +227,7 @@ def create_gui():
     """
     try:
         root = tk.Tk()
-        root.geometry("300x300")
+        root.geometry("300x400")
         root.iconbitmap("assets/icon.ico")
         root.wm_iconbitmap("assets/icon.ico")
         superiority_gui = SuperiorityGUI(root)

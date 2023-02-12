@@ -14,7 +14,7 @@ from utils.process import get_pm,get_client
 # Offsets
 m_iObserverMode = get_offset("m_iObserverMode")
 dwLocalPlayer = get_offset("dwLocalPlayer")
-key = getConfiguration("thirdperson+key")
+
 
 
 # TODO: this code works, but the perspective is not changed correctly, it is not in the back of the player if the player is moving
@@ -30,6 +30,9 @@ def thirdperson():
 
     # main loop
     while True:
+        # Config data
+        key = getConfiguration("thirdperson+key")
+
         # get mem address of local player
         local_player: int = pm.read_int(client + dwLocalPlayer)
 

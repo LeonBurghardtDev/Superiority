@@ -40,8 +40,7 @@ def createGUI():
         print_error("hotkeys watcher failed to start")
         
 
-    
-# entry point
+# programm entry point
 if __name__ == "__main__":
     main()
 
