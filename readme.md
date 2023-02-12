@@ -1,14 +1,7 @@
-# Superiority
+# Superiority - External CS:GO Cheat
 
 [![PyPI - Python](https://img.shields.io/pypi/pyversions/iconsdk?logo=pypi)](https://pypi.org/project/iconsdk)
 [![PyPI](https://img.myrandomwebs.com/pypi/v/nine.svg)]()
-
-
-## Disclaimer
-
-Using cheats in games like CS:GO is against the terms of service of the game and the game developer, Valve Corporation. Using cheats like Superiority on a VAC protected server can result in a permanent ban from playing the game. The creator of this cheat, tr3x, will not be held responsible for any damage or consequences that may arise from using this software.
-
-By using this cheat, you understand and accept the risk of getting banned from the game. Use it at your own discretion.
 
 ## Introduction
 
@@ -18,7 +11,25 @@ With Superiority, you'll have access to features like aimbot, wallhacks, bhop, a
 
 ## Features
 
-- Bhop (Automatically performs bunny hop)
-- ESP (Highlights players in different colors based on their teams)
+- 🎯🔫 Aimbot
+- 🐰🔥 Bunnyhop
+- 🔍👀 ESP
+- 🔧🔬 Custom FOV Changer
+- 🕯️ No Flash
+- 💥🎯 No Recoil
+- 🗺️🔍 Radar Hack
+- 👥 Third Person
+- 💥🔫 Triggerbot
 
 
+## Disclaimer
+
+Educational purposes only - 
+Using cheats in games like CS:GO is against the terms of service of the game and the game developer, Valve Corporation. Using cheats like Superiority on a VAC protected server can result in a permanent ban from playing the game. The creator of this cheat, tr3x, will not be held responsible for any damage or consequences that may arise from using this software.
+
+By using this cheat, you understand and accept the risk of getting banned from the game. Use it at your own discretion.
+
+## Credits
+
+- Thanks to [Valve](https://github.com/ValveSoftware) for leaking their Game Engine back in 2007 and still using it :D
+- Thanks to [frk1 for hazedumper](url=https://github.com/frk1/hazedumper)
