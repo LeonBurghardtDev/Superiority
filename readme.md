@@ -1,4 +1,4 @@
-# Superiority by tr3x
+# Superiority
 
 [![PyPI - Python](https://img.shields.io/pypi/pyversions/iconsdk?logo=pypi)](https://pypi.org/project/iconsdk)
 [![PyPI](https://img.myrandomwebs.com/pypi/v/nine.svg)]()
