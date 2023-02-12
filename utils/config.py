@@ -22,14 +22,24 @@ def ensure_config_exists():
     config = configparser.ConfigParser()
     # Set default values for the config file
     config['DEFAULT'] = {
-                        'esp+key': 'n',
-                        'triggerbot+toggle': 'False',
-                        'triggerbot+delay': '0.1',
-                        'bhop+toggle': 'False',
-                        'esp+toggle': 'False',
-                        'fov+toggle': 'False',
-                        'fov': '140',
-                        'fov+key': 'x'
+                            'triggerbot+toggle': 'False',
+                            'triggerbot+delay': '0.1',
+                            'triggerbot+activate+key': 'f1',
+
+                            'bhop+toggle': 'False',
+                            'bhop+activate+key': 'f2',
+
+                            'thirdperson+toggle': 'False',
+                            'thirdperson+key': 'v',
+                            'thirdperson+activate+key': 'f3',
+
+                            'esp+toggle': 'False',
+                            'esp+activate+key': 'f4',
+
+                            'fov+toggle': 'False',
+                            'fov': '140',
+                            'fov+key': 'x',
+                            'fov+activate+key': 'f5'
                         }
 
     # Check if the Superiority directory exists

@@ -11,17 +11,20 @@ from utils.output import print_success, print_error, print_warning
 from multiprocessing import Process
 from src.bhop import bhop
 from src.esp import esp
+from src.thirdperson import thirdperson
 from src.triggerbot import triggerbot
 from src.fov import fov
-import psutil
-import sys
+
+# TODO: this works, but threads would be more efficient and performant
 
 
+# class to store the processes
 class Processes:
     p_bhop:Process = None
     p_esp:Process = None
     p_fov:Process = None
     p_triggerbot:Process = None
+    p_thirdperson:Process = None
 
 def bhop_change_status():
     """
@@ -128,6 +131,32 @@ def triggerbot_change_status():
     else:
         print_error("triggerbot status could not be updated: there was an error managing the triggerbot process")
 
+
+def thirdperson_change_status():
+    """
+    This function manages the thirdperson process
+    """
+
+    thirdperson_process = Processes.p_thirdperson
+    if thirdperson_process is None:
+        thirdperson_process = Process(target=thirdperson)
+        Processes.p_thirdperson = thirdperson_process
+
+     # create a new process for thirdperson
+    if getConfiguration('thirdperson+toggle') == 'True':
+        thirdperson_process.start()
+        # check if thirdperson started
+        if thirdperson_process.is_alive():
+            print_success("thirdperson started")
+        else:
+            print_error("thirdperson failed to start")
+    elif getConfiguration('thirdperson+toggle') == 'False':
+        if thirdperson_process.is_alive():
+            thirdperson_process.kill()
+            Processes.p_thirdperson = None
+        print_warning("thirdperson is disabled")
+    else:
+        print_error("thirdperson status could not be updated: there was an error managing the thirdperson process")
 
 def start_threads():
     """
