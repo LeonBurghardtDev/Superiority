@@ -7,6 +7,7 @@ This module contains the code for the fov changer.
 """
 import keyboard
 import time
+import pymem.exception
 from utils.offsets import get_offset
 from utils.config import getConfiguration
 from utils.output import print_success
@@ -48,8 +49,11 @@ def fov():
         if not local_player:
             continue
 
-        # check if player is alive
-        if not pm.read_int(local_player + m_fFlags):
+        try:
+            # check if player is alive
+            if not pm.read_int(local_player + m_fFlags):
+                continue
+        except pymem.exception.MemoryReadError:
             continue
 
         iFOV = pm.read_int(local_player + m_iDefaultFOV)

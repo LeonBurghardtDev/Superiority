@@ -30,6 +30,7 @@ class SuperiorityGUI():
     radar_btn_text = f"Radar (activate hotkey: {getConfiguration('radar+activate+key').upper()})"
     noflash_btn_text = f"NoFlash (activate hotkey: {getConfiguration('noflash+activate+key').upper()})"
     norecoil_btn_text = f"NoRecoil (activate hotkey: {getConfiguration('norecoil+activate+key').upper()})"
+    skinchanger_btn_text = f"Skinchanger (activate hotkey: {getConfiguration('skinchanger+activate+key').upper()})"
     
 
     def __init__(self, master):
@@ -48,6 +49,7 @@ class SuperiorityGUI():
         self.radar_var = tk.BooleanVar()
         self.noflash_var = tk.BooleanVar()
         self.norecoil_var = tk.BooleanVar()
+       # self.skinchanger_var = tk.BooleanVar() # doesn't work yet
 
         # set the checkbuttons to the current status of the cheats
         self.triggerbot_var.set(getConfiguration("triggerbot+toggle"))
@@ -59,12 +61,14 @@ class SuperiorityGUI():
         self.radar_var.set(getConfiguration("radar+toggle"))
         self.noflash_var.set(getConfiguration("noflash+toggle"))
         self.norecoil_var.set(getConfiguration("norecoil+toggle"))
+       # self.skinchanger_var.set(getConfiguration("skinchanger+toggle")) # doesn't work yet
 
         # create the gui elements
 
         # title
-        self.title_label = tk.Label(master, text="Superiority v0.1 by tr3x")
+        self.title_label = tk.Label(master, text="Superiority by tr3x", font=("Helvetica", 16, "bold"))
         self.title_label.pack()
+
 
         # checkbutton for triggerbot
         self.triggerbot_cb = tk.Checkbutton(master,name='triggebot', text=self.triggerbot_btn_text, variable=self.triggerbot_var, command=self.triggerbot_toggle)
@@ -104,6 +108,10 @@ class SuperiorityGUI():
         # checkbuttons for aimbot
         self.aimbot_cb = tk.Checkbutton(master,name='aimbot', text=self.aimbot_btn_text, variable=self.aimbot_var, command=self.aimbot_toggle)
         self.aimbot_cb.pack()
+
+        # checkbuttons for skinchanger (doesn't work yet)
+        # self.skinchanger_cb = tk.Checkbutton(master,name='skinchanger', text=self.skinchanger_btn_text, variable=self.skinchanger_var, command=self.skinchanger_toggle)
+        # self.skinchanger_cb.pack()
 
         # checkbuttons for fov
         self.fov_cb = tk.Checkbutton(master,name='fov', text=self.fov_btn_text, variable=self.fov_var, command=self.fov_toggle)
@@ -185,7 +193,6 @@ class SuperiorityGUI():
         """
         This function is called when the user edits the spinbox for the fov.
         """
-        print("edit")
         # Get the current value of the Entry widget
         value = self.fov_spinbox.get()
         try:
@@ -226,6 +233,10 @@ class SuperiorityGUI():
         setConfiguration("thirdperson+toggle", str(self.thirdperson_var.get()))
         thirdperson_change_status()
 
+    # def skinchanger_toggle(self): (not working yet)
+    #    setConfiguration("skinchanger+toggle", str(self.skinchanger_var.get()))
+    #    skinchanger_change_status()
+        
     def norecoil_toggle(self):
         setConfiguration("norecoil+toggle", str(self.norecoil_var.get()))
         norecoil_change_status()
@@ -259,7 +270,7 @@ def create_gui():
     """
     try:
         root = tk.Tk()
-        root.geometry("300x400")
+        root.geometry("300x500")
         root.iconbitmap("assets/icon.ico")
         root.wm_iconbitmap("assets/icon.ico")
         superiority_gui = SuperiorityGUI(root)

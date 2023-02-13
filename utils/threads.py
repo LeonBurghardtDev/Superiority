@@ -15,6 +15,7 @@ from src.bhop import bhop
 from src.radar import radar
 from src.aimbot import aimbot
 from src.esp import esp
+from src.skinchanger import skinChanger
 from src.norecoil import norecoil
 from src.noflash import noflash
 from src.thirdperson import thirdperson
@@ -35,6 +36,7 @@ class Processes:
     p_radar:Process = None
     p_noflash:Process = None
     p_norecoil:Process = None
+    p_skinchanger:Process = None
 
 def bhop_change_status():
     """
@@ -271,6 +273,32 @@ def norecoil_change_status():
         print_warning("norecoil is disabled")
     else:
         print_error("norecoil status could not be updated: there was an error managing the norecoil process")
+
+def skinchanger_change_status():
+    """
+    This function manages the skinchanger process
+    """
+
+    skinchanger_process = Processes.p_skinchanger
+    if skinchanger_process is None:
+        skinchanger_process = Process(target=skinChanger)
+        Processes.p_skinchanger = skinchanger_process
+
+     # create a new process for skinchanger
+    if getConfiguration('skinchanger+toggle') == 'True':
+        skinchanger_process.start()
+        # check if skinchanger started
+        if skinchanger_process.is_alive():
+            print_success("skinchanger started")
+        else:
+            print_error("skinchanger failed to start")
+    elif getConfiguration('skinchanger+toggle') == 'False':
+        if skinchanger_process.is_alive():
+            skinchanger_process.kill()
+            Processes.p_skinchanger = None
+        print_warning("skinchanger is disabled")
+    else:
+        print_error("skinchanger status could not be updated: there was an error managing the skinchanger process")
 
 def start_threads():
     """

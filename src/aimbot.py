@@ -162,7 +162,8 @@ def aimbot():
 
     # config data
     key = getConfiguration("aimbot+key")
-    fov = int(getConfiguration("aimbot+fov"))
+    #fov = int(getConfiguration("aimbot+fov"))
+    fov = 106 # when using the fov from the config file, the aimbot will not work properly on some maps
 
     # get local player
     local_player = pm.read_uint(client + dwLocalPlayer)
@@ -180,7 +181,7 @@ def aimbot():
         
         for i in range(1,32): # loop through all entities (1-32 are reserved for players)
             entity = pm.read_uint(client + dwEntityList + i * 0x10) # get entity pointer
-            if entity:
+            if entity and entity != local_player:
                 try:
                     entity_team_id = pm.read_uint(entity + m_iTeamNum) # get entity team id
                     entity_health = pm.read_uint(entity + m_iHealth) # get entity health
@@ -200,9 +201,9 @@ def aimbot():
                     localpos_z = pm.read_float(local_player + m_vecOrigin + 8) + localpos_z_angles # get local player position
 
                     try:
-                        entitypos_x = pm.read_float(entity_bones + 0x30 * 8 + 0xC) # get entity position
-                        entitypos_y = pm.read_float(entity_bones + 0x30 * 8 + 0x1C) # get entity position
-                        entitypos_z = pm.read_float(entity_bones + 0x30 * 8 + 0x2C) # get entity position
+                       entitypos_x = pm.read_float(entity_bones + 0x30 * 8 + 0xC) # get entity position
+                       entitypos_y = pm.read_float(entity_bones + 0x30 * 8 + 0x1C) # get entity position
+                       entitypos_z = pm.read_float(entity_bones + 0x30 * 8 + 0x2C) # get entity position
                     except:
                         continue
 

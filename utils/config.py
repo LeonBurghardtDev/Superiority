@@ -56,6 +56,9 @@ def ensure_config_exists():
                             'aimbot+fov': '140',
                             'aimbot+activate+key': 'f9',
 
+                            'skinchanger+toggle': 'False',
+                            'skinchanger+activate+key': 'f10',
+
                         }
 
     # Check if the Superiority directory exists

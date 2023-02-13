@@ -8,6 +8,7 @@ This module contains the bhop function.
 
 import time
 import keyboard
+import pymem.exception
 from utils.offsets import get_offset
 from utils.process import get_pm, get_client
 from utils.config import getConfiguration, setConfiguration
@@ -61,11 +62,15 @@ def bhop() -> None:
         if not local_player:
             continue
 
-        # check if player is on ground
-        if pm.read_int(local_player + m_fFlags) & 1 << 0:
-            
-            # perform bunny hop
-            pm.write_int(client + dwForceJump, 6)
-            time.sleep(0.01)
-            pm.write_int(client + m_fFlags, 4)
+
+        try:
+            # check if player is on ground
+            if pm.read_int(local_player + m_fFlags) & 1 << 0:
+                
+                # perform bunny hop
+                pm.write_int(client + dwForceJump, 6)
+                time.sleep(0.01)
+                pm.write_int(client + m_fFlags, 4)
+        except pymem.exception.MemoryReadError:
+            continue
 

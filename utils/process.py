@@ -7,6 +7,8 @@ This module contains the code for the process class.
 
 import pymem
 import pymem.process
+import struct
+import sys
 
 class Process:
     """
@@ -28,7 +30,10 @@ def get_pm() -> pymem.Pymem:
 
     """
     if Process.static_pm is None:
-       Process.static_pm = pymem.Pymem("csgo.exe")
+        try:
+            Process.static_pm = pymem.Pymem("csgo.exe")
+        except pymem.exception.ProcessNotFound:
+            sys.exit("CSGO is not running!")
     return Process.static_pm
 
 def get_client() -> int:
@@ -63,3 +68,8 @@ def get_engine() -> int:
             if module.name == "engine.dll":
                 Process.static_engine = module.lpBaseOfDll
     return Process.static_engine
+
+def read_formatted_array(process: pymem.Pymem, address: int, format_string: str) -> tuple:
+    size = struct.calcsize(format_string)
+    raw = process.read_bytes(address, size)
+    return struct.unpack(format_string, raw)

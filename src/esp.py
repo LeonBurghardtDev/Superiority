@@ -8,6 +8,7 @@ This module is used to enable ESP (Extra Sensory Perception).
 
 from utils.offsets import get_offset
 from utils.process import get_pm, get_client
+import pymem.exception
 
 # Offsets
 dwEntityList = get_offset("dwEntityList")
@@ -42,8 +43,11 @@ def esp():
 
             if entity:
                 # if exist, read teamd id and glow index
-                entity_team_id = pm.read_int(entity + m_iTeamNum)
-                entity_glow = pm.read_int(entity + m_iGlowIndex)
+                try:
+                    entity_team_id = pm.read_int(entity + m_iTeamNum)
+                    entity_glow = pm.read_int(entity + m_iGlowIndex)
+                except pymem.exception.MemoryReadError:
+                    pass
 
                 if entity_team_id == 2:  # t
                     # set glow to red

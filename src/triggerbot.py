@@ -7,6 +7,7 @@ This is the triggerbot module.
 """
 
 import time
+import pymem.exception
 
 from utils.offsets import get_offset
 from utils.process import get_pm, get_client
@@ -44,7 +45,10 @@ def triggerbot():
         # get local player team
         localTeam = pm.read_int(local_player + m_iTeamNum)
         # get crosshair team
-        crosshairTeam = pm.read_int(getTeam + m_iTeamNum)
+        try:
+            crosshairTeam = pm.read_int(getTeam + m_iTeamNum)
+        except pymem.exception.MemoryReadError:
+            continue
 
         # check if crosshair is on enemy
         if crosshairID > 0 and crosshairID <= 32 and localTeam != crosshairTeam:
