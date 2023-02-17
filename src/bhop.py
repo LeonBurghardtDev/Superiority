@@ -49,28 +49,27 @@ def bhop() -> None:
             keyboard.is_pressed(key)
         except:
             key = "space"
-            setConfiguration("bhop+key", key)
-
-        # check if spacebar is being pressed
-        if not keyboard.is_pressed(key):
-            continue
-
-        # get mem address of local player
-        local_player: int = pm.read_int(client + dwLocalPlayer)
-
-        # check if the address was found
-        if not local_player:
-            continue
-
+            setConfiguration("bhop+key", key) # avoid error on next loop
 
         try:
+            # check if spacebar is being pressed
+            if not keyboard.is_pressed(key):
+                continue
+
+            # get mem address of local player
+            local_player: int = pm.read_int(client + dwLocalPlayer)
+
+            # check if the address was found
+            if not local_player:
+                continue
+
             # check if player is on ground
             if pm.read_int(local_player + m_fFlags) & 1 << 0:
-                
                 # perform bunny hop
-                pm.write_int(client + dwForceJump, 6)
+                pm.write_int(client + dwForceJump, 5)
                 time.sleep(0.01)
                 pm.write_int(client + m_fFlags, 4)
+
         except pymem.exception.MemoryReadError:
             continue
 

@@ -5,6 +5,7 @@ Created on: 2023-02-12
 This module is the main module of the noflash cheat.
 """
 
+import pymem.exception
 
 from utils.offsets import get_offset
 from utils.process import get_pm, get_client
@@ -22,11 +23,15 @@ def noflash():
     pm = get_pm()
     client = get_client()
 
-    # get local player
-    local_player = pm.read_uint(client + dwLocalPlayer)
 
-    # main loop
-    while True:
-        flash_value = pm.read_float(local_player + m_flFlashMaxAlpha) # get flash value
-        if flash_value > 0: # if the player is flashed
-            pm.write_float(local_player + m_flFlashMaxAlpha, float(0)) # set flash value to zero
+    try:
+        # get local player
+        local_player = pm.read_uint(client + dwLocalPlayer)
+
+        # main loop
+        while True:
+            flash_value = pm.read_float(local_player + m_flFlashMaxAlpha) # get flash value
+            if flash_value > 0: # if the player is flashed
+                pm.write_float(local_player + m_flFlashMaxAlpha, float(0)) # set flash value to zero
+    except pymem.exception.MemoryReadError:
+        pass

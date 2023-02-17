@@ -24,10 +24,11 @@ def radar():
 
     # main loop
     while True: 
-        for i in range(1, 32): # loop through all players (enteties 1-32 are reserved for players )
-            entity = pm.read_int(client + dwEntityList + i * 0x10) # get entity address
-            if entity:
-                try:
-                    pm.write_int(entity + m_bSpotted, 1) # write 1 to m_bSpotted to make the player visible on the radar
-                except pymem.exception.MemoryWriteError:
+        try:
+            for i in range(1, 32): # loop through all players (enteties 1-32 are reserved for players )
+                entity = pm.read_int(client + dwEntityList + i * 0x10) # get entity address
+                if entity:
+                    
+                        pm.write_int(entity + m_bSpotted, 1) # write 1 to m_bSpotted to make the player visible on the radar
+        except pymem.exception.MemoryWriteError:
                     pass

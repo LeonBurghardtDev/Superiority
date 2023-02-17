@@ -41,30 +41,30 @@ def fov():
             targetFov = 106
             key = "x"
         
-        
-        # get mem address of local player
-        local_player: int = pm.read_int(client + dwLocalPlayer)
-
-        # check if the address was found
-        if not local_player:
-            continue
-
         try:
+            # get mem address of local player
+            local_player: int = pm.read_int(client + dwLocalPlayer)
+
+            # check if the address was found
+            if not local_player:
+                continue
+
             # check if player is alive
             if not pm.read_int(local_player + m_fFlags):
-                continue
+                    continue
+
+            iFOV = pm.read_int(local_player + m_iDefaultFOV)
+
+            if keyboard.is_pressed(key):
+                if iFOV == int(targetFov):
+                    pm.write_int(local_player + m_iDefaultFOV, 106)
+                    print_success(f"FOV changed from {targetFov} to 106")
+                else:
+                    pm.write_int(local_player + m_iDefaultFOV, int(targetFov))
+                    print_success(f"FOV changed from 106 to {targetFov}")
+                time.sleep(0.1)
+                
         except pymem.exception.MemoryReadError:
             continue
-
-        iFOV = pm.read_int(local_player + m_iDefaultFOV)
-
-        if keyboard.is_pressed(key):
-            if iFOV == int(targetFov):
-                pm.write_int(local_player + m_iDefaultFOV, 106)
-                print_success(f"FOV changed from {targetFov} to 106")
-            else:
-                pm.write_int(local_player + m_iDefaultFOV, int(targetFov))
-                print_success(f"FOV changed from 106 to {targetFov}")
-            time.sleep(0.1)
 
 
